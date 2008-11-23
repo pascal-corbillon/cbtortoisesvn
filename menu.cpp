@@ -9,7 +9,6 @@
 #include "pch.h"
 #include "menu.h"
 #include "utils.h"
-#include <wx/menu.h>
 
 //******************************************************************************
 
@@ -84,15 +83,7 @@ void CBTSVN::ConvertIndicesToMenuItems(
         if (indices.at(i)==-1)
             items.push_back(_("-----------------"));
         else
-        {
-            size_t index = indices.at(i);
-
-            // prevent out of index
-            if ((index<0) || (index > (menu.size()-1)))
-                continue;
-
-            items.push_back(menu.at(index).text);
-        }
+            items.push_back(menu.at(indices.at(i)).text);
 }
 
 //******************************************************************************
@@ -114,10 +105,6 @@ void CBTSVN::MakeMenu(const CBSvnPluginManager::SourceMenu source,
         else
         {
             size_t index = indices.at(i);
-
-            // prevent out of index
-            if ((index<0) || (index > (menu.size()-1)))
-                continue;
 
             int id;
             source==CBSvnPluginManager::smMainMenu ? id=menu.at(index).menu_id : id=menu.at(index).popup_id;
@@ -203,11 +190,10 @@ void CBTSVN::UpdateMenu(const CBSvnPluginManager::SourceMenu source,
     // add variable menu items
     for (size_t i=0;i<indices.size();i++)
     {
-        size_t index = indices.at(i);
-
-        // prevent out of index
-        if ((index<0) || (index > (menu.size()-1)))
+        if (indices.at(i)==-1)
             continue;
+
+        size_t index = indices.at(i);
 
         int id;
         source==CBSvnPluginManager::smMainMenu ? id=menu.at(index).menu_id : id=menu.at(index).popup_id;
