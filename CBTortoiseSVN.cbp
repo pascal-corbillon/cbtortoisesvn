@@ -4,20 +4,13 @@
 	<Project>
 		<Option title="CBTortoiseSVN" />
 		<Option compiler="gcc" />
-		<Option show_notes="0">
-			<notes>
-				<![CDATA[SVN plugin for codeblocks. Basedon TortoiseSVN.
-
-Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
-			</notes>
-		</Option>
 		<Build>
 			<Target title="default">
 				<Option output="bin\CBTortoiseSVN.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option host_application="v:\codeblocks_dbg\codeblocks.exe" />
+				<Option host_application="d:\software\codeblocks_svn\src\devel\codeblocks.exe" />
 				<ExtraCommands>
 					<Add after="zip -j9 bin\CBTortoiseSVN.zip manifest.xml" />
 				</ExtraCommands>
@@ -28,9 +21,10 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 			</Environment>
 		</Build>
 		<VirtualTargets>
-			<Add alias="All" targets="default;" />
+			<Add alias="All" targets="default" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-Wall" />
 			<Add option="-g" />
 			<Add option="-pipe" />
 			<Add option="-mthreads" />
@@ -73,13 +67,7 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 		<Unit filename="ConfigDialog.h" />
 		<Unit filename="LogDialog.cpp" />
 		<Unit filename="LogDialog.h" />
-		<Unit filename="TwoPaneSelectionDialog.cpp" />
-		<Unit filename="TwoPaneSelectionDialog.h" />
 		<Unit filename="manifest.xml" />
-		<Unit filename="menu.cpp" />
-		<Unit filename="menu.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="pch.h">
 			<Option compile="1" />
 			<Option weight="0" />
@@ -88,7 +76,6 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 		<Unit filename="utils.h" />
 		<Unit filename="wxsmith\ConfigDialog.wxs" />
 		<Unit filename="wxsmith\LogDialog.wxs" />
-		<Unit filename="wxsmith\TwoPaneSelectionDialog.wxs" />
 		<Extensions>
 			<code_completion />
 			<envvars />
@@ -98,7 +85,6 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 				<resources>
 					<wxDialog wxs="wxsmith/ConfigDialog.wxs" src="ConfigDialog.cpp" hdr="ConfigDialog.h" name="ConfigDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/LogDialog.wxs" src="LogDialog.cpp" hdr="LogDialog.h" name="LogDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/TwoPaneSelectionDialog.wxs" src="TwoPaneSelectionDialog.cpp" hdr="TwoPaneSelectionDialog.h" name="TwoPaneSelectionDialog" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

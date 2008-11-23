@@ -1,6 +1,6 @@
 //******************************************************************************
 //* Name:      utils.cpp
-//* Purpose:   CBTortoiseSVN utilities
+//* Purpose:   CBTortoiseSVN  utilities
 //* Author:    Jan van den Borst
 //* Copyright: (c) Jan van den Borst
 //* License:   GPL
@@ -10,22 +10,18 @@
 #include "utils.h"
 
 //******************************************************************************
-
-#define bzero(a) memset(a,0,sizeof(a)) //easier -- shortcut
-
-//******************************************************************************
 using namespace CBTSVN;
 //******************************************************************************
 
-CBTSVN::Logger& CBTSVN::Logger::GetInstance()
+Logger& Logger::GetInstance()
 {
-    static CBTSVN::Logger logger;
+    static Logger logger;
     return logger;
 }
 
 //******************************************************************************
 
-void CBTSVN::Logger::log(const wxString& log)
+void Logger::log(const wxString& log)
 {
     for (event_subscribers::const_iterator it =
                 m_subscribers.begin(); it != m_subscribers.end(); ++it)
@@ -34,7 +30,7 @@ void CBTSVN::Logger::log(const wxString& log)
 
 //******************************************************************************
 
-void CBTSVN::Logger::Subscribe(ILogSink& client)
+void Logger::Subscribe(ILogSink& client)
 {
     if (std::find(m_subscribers.begin(),
                   m_subscribers.end(), &client) == m_subscribers.end())
@@ -43,7 +39,7 @@ void CBTSVN::Logger::Subscribe(ILogSink& client)
 
 //******************************************************************************
 
-void CBTSVN::Logger::Unsubscribe(ILogSink& client)
+void Logger::Unsubscribe(ILogSink& client)
 {
     event_subscribers::iterator it =
         std::find(m_subscribers.begin(), m_subscribers.end(),
@@ -84,45 +80,7 @@ void CBTSVN::GetFolders(const wxString& plugin_name)
 }
 
 //******************************************************************************
-
-std::vector<int> CBTSVN::convert(const wxString& s)
-{
-    std::vector<int> out;
-    std::string::size_type i;
-    wxString in=s;
-
-    while ((i=in.find_first_of(_(",")))!=std::string::npos)
-    {
-        wxString s=in.substr(0,i);
-        long index;
-        s.ToLong(&index);
-        out.push_back(index);
-        in=in.substr(i+1);
-    }
-
-    if (in.size()>0)
-    {
-        long index;
-        in.ToLong(&index);
-        out.push_back(index);
-        return out;
-    }
-}
-
-//******************************************************************************
-
-wxString CBTSVN::convert(const std::vector<int>& vec)
-{
-    wxString s;
-    for (size_t i=0;i<vec.size();++i)
-    {
-        s+=wxString::Format(_("%d"),vec.at(i));
-        if (i!=(vec.size()-1))
-            s+=_(",");
-    }
-    return s;
-}
-
+#define bzero(a) memset(a,0,sizeof(a)) //easier -- shortcut
 //******************************************************************************
 
 bool IsWinNT()  //check if we're running NT
@@ -149,7 +107,7 @@ void ErrorMessage(const wxString& str)  //display detailed error info
     wxString message(msg);
     message.Replace(_("\r"),_(""));
     message.Replace(_("\n"),_(""));
-    CBTSVN::Logger::GetInstance().log(str + _(" --> ") + message);
+    Logger::GetInstance().log(str + _(" --> ") + message);
     LocalFree(msg);
 }
 
@@ -269,14 +227,14 @@ int CBTSVN::Run(const wxString& app, const wxString& dir, const wxString& comman
 
 //******************************************************************************
 
-bool CBTSVN::Run(bool blocked, bool hidden, const wxString& command, unsigned long& exit_code)
+bool CBTSVN::Run(bool blocked, bool hidden, const wxString& command, unsigned long& exit_code )
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    ZeroMemory(&si, sizeof(si));
+    ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
-    ZeroMemory(&pi, sizeof(pi));
+    ZeroMemory( &pi, sizeof(pi) );
 
     if (hidden)
     {
@@ -290,21 +248,21 @@ bool CBTSVN::Run(bool blocked, bool hidden, const wxString& command, unsigned lo
     WCHAR* COMMAND = buf.data();
 
     // Start the child process.
-    bool result = CreateProcess(NULL, COMMAND, NULL, NULL, FALSE, 0,
-                                NULL, NULL, &si, &pi);
+    bool result = CreateProcess( NULL, COMMAND, NULL, NULL, FALSE, 0,
+                                 NULL, NULL, &si, &pi );
 
     if (blocked)
     {
         // Wait until child process exits.
-        WaitForSingleObject(pi.hProcess, INFINITE);
+        WaitForSingleObject( pi.hProcess, INFINITE );
 
         // Get the return value of the child process
         result = result && GetExitCodeProcess(pi.hProcess, &exit_code);
     }
 
     // Close process and thread handles.
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
+    CloseHandle( pi.hProcess );
+    CloseHandle( pi.hThread );
     return result;
 }
 

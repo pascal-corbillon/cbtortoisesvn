@@ -51,7 +51,7 @@ namespace CBTSVN
     class ILogSink :public IInterfaceBase
     {
         public:
-            virtual void OnLogEvent(const wxString& msg)=0;
+           virtual void OnLogEvent(const wxString& msg)=0;
     };
 
     //logging
@@ -68,10 +68,6 @@ namespace CBTSVN
             typedef std::vector<ILogSink*> event_subscribers;
             event_subscribers m_subscribers;
     };
-
-    // conversions
-    std::vector<int> convert(const wxString& s);
-    wxString convert(const std::vector<int>& vec);
 
     // generic os
     int  Run(const wxString& app, const wxString& dir, const wxString& command, wxString& output);

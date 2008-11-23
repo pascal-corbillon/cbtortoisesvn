@@ -9,19 +9,19 @@
 #include "pch.h"
 #include "ConfigDialog.h"
 #include "CBSvnPluginManager.h"
-#include "TwoPaneSelectionDialog.h"
-#include "menu.h"
 
 using namespace CBTSVN;
 
 //(*IdInit(ConfigDialog)
+const long ConfigDialog::ID_NOTEBOOK1 = wxNewId();
+const long ConfigDialog::ID_PANEL2 = wxNewId();
 const long ConfigDialog::ID_STATICTEXT1 = wxNewId();
 const long ConfigDialog::ID_TEXTCTRL1 = wxNewId();
 const long ConfigDialog::ID_BUTTON2 = wxNewId();
 const long ConfigDialog::ID_STATICTEXT2 = wxNewId();
 const long ConfigDialog::ID_TEXTCTRL2 = wxNewId();
 const long ConfigDialog::ID_BUTTON5 = wxNewId();
-const long ConfigDialog::ID_PANEL2 = wxNewId();
+const long ConfigDialog::ID_PANEL3 = wxNewId();
 const long ConfigDialog::ID_STATICBOX1 = wxNewId();
 const long ConfigDialog::ID_STATICBOX2 = wxNewId();
 const long ConfigDialog::ID_CHECKBOX1 = wxNewId();
@@ -30,14 +30,9 @@ const long ConfigDialog::ID_CHECKBOX2 = wxNewId();
 const long ConfigDialog::ID_STATICTEXT3 = wxNewId();
 const long ConfigDialog::ID_STATICBOX3 = wxNewId();
 const long ConfigDialog::ID_CHECKBOX4 = wxNewId();
-const long ConfigDialog::ID_STATICBOX4 = wxNewId();
-const long ConfigDialog::ID_BUTTON6 = wxNewId();
-const long ConfigDialog::ID_BUTTON7 = wxNewId();
-const long ConfigDialog::ID_PANEL3 = wxNewId();
-const long ConfigDialog::ID_BUTTON4 = wxNewId();
-const long ConfigDialog::ID_STATICTEXT4 = wxNewId();
+const long ConfigDialog::ID_RADIOBOXUI = wxNewId();
 const long ConfigDialog::ID_PANEL1 = wxNewId();
-const long ConfigDialog::ID_NOTEBOOK1 = wxNewId();
+const long ConfigDialog::ID_BUTTON4 = wxNewId();
 const long ConfigDialog::ID_BUTTON1 = wxNewId();
 const long ConfigDialog::ID_BUTTON3 = wxNewId();
 //*)
@@ -47,8 +42,7 @@ BEGIN_EVENT_TABLE(ConfigDialog,wxDialog)
     //*)
 END_EVENT_TABLE()
 
-ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entries, wxWindow* parent,wxWindowID id) :
-        m_all_menu_entries(all_menu_entries)
+ConfigDialog::ConfigDialog(wxWindow* parent,wxWindowID id)
 {
     //(*Initialize(ConfigDialog)
     Create(0, wxID_ANY, _("CBTortoiseSVN Settings"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
@@ -73,15 +67,18 @@ ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entrie
     CheckBoxEditorIntegration = new wxCheckBox(Panel2, ID_CHECKBOX2, _("Editor"), wxPoint(32,96), wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX2"));
     CheckBoxEditorIntegration->SetValue(false);
     StaticText3 = new wxStaticText(Panel2, ID_STATICTEXT3, _("(*) Requires a Codeblocks restart"), wxPoint(24,182), wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-    StaticBox3 = new wxStaticBox(Panel2, ID_STATICBOX3, _("Performance"), wxPoint(16,128), wxSize(408,44), 0, _T("ID_STATICBOX3"));
+    StaticBox3 = new wxStaticBox(Panel2, ID_STATICBOX3, _("Performance"), wxPoint(16,128), wxSize(392,44), 0, _T("ID_STATICBOX3"));
     CheckBoxMaxIntegration = new wxCheckBox(Panel2, ID_CHECKBOX4, _("Don\'t check if files are under version control (improves performance)"), wxPoint(32,148), wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX4"));
     CheckBoxMaxIntegration->SetValue(false);
-    StaticBox4 = new wxStaticBox(Panel2, ID_STATICBOX4, _("Menu"), wxPoint(232,8), wxSize(192,112), 0, _T("ID_STATICBOX4"));
-    ButtonMainMenu = new wxButton(Panel2, ID_BUTTON6, _("Edit main menu..."), wxPoint(248,32), wxSize(160,32), 0, wxDefaultValidator, _T("ID_BUTTON6"));
-    ButtonPopupMenu = new wxButton(Panel2, ID_BUTTON7, _("Edit popup menu..."), wxPoint(248,72), wxSize(160,32), 0, wxDefaultValidator, _T("ID_BUTTON7"));
+    wxString wxRadioBoxChoices_RadioBoxUI[2] = 
+    {
+        _("Simple"),
+        _("Expert")
+    };
+    RadioBoxUI = new wxRadioBox(Panel2, ID_RADIOBOXUI, _("User interface"), wxPoint(232,8), wxSize(176,112), 2, wxRadioBoxChoices_RadioBoxUI, 1, 0, wxDefaultValidator, _T("ID_RADIOBOXUI"));
+    RadioBoxUI->Disable();
     Panel1 = new wxPanel(Notebook1, ID_PANEL1, wxPoint(124,8), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
-    ButtonShowDebug = new wxButton(Panel1, ID_BUTTON4, _("Toggle debug on/off"), wxPoint(16,16), wxSize(128,23), 0, wxDefaultValidator, _T("ID_BUTTON4"));
-    StaticText4 = new wxStaticText(Panel1, ID_STATICTEXT4, _("Note: The CBTortoiseSVN plugin logs to the Code::Blocks log tab. "), wxPoint(16,48), wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+    ButtonShowDebug = new wxButton(Panel1, ID_BUTTON4, _("Show debug window"), wxPoint(16,16), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
     Notebook1->AddPage(PanelPath, _("Paths"), false);
     Notebook1->AddPage(Panel2, _("Integration"), false);
     Notebook1->AddPage(Panel1, _("Misc."), false);
@@ -96,11 +93,8 @@ ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entrie
     FlexGridSizer1->Add(BoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
-
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonGetSvnPathClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonGetTortoiseSVNPathClick);
-    Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonMainMenuClick);
-    Connect(ID_BUTTON7,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonPopupMenuClick);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonShowDebugClick);
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnCancelButtonClick);
     Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnOkButtonClick);
@@ -113,6 +107,7 @@ ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entrie
     CheckBoxProjectManagerIntegration->SetValue(CBSvnPluginManager::GetInstance().GetProjectManagerIntegration());
     CheckBoxEditorIntegration->SetValue(CBSvnPluginManager::GetInstance().GetEditorIntegration());
     CheckBoxMaxIntegration->SetValue(CBSvnPluginManager::GetInstance().GetMaxIntegrationPerformance());
+    RadioBoxUI->SetSelection(CBSvnPluginManager::GetInstance().GetExpert());
 }
 
 //******************************************************************************
@@ -127,7 +122,7 @@ ConfigDialog::~ConfigDialog()
 
 void ConfigDialog::OnCancelButtonClick(wxCommandEvent& event)
 {
-    EndModal(wxID_CANCEL);
+    Close();
 }
 
 //******************************************************************************
@@ -156,8 +151,9 @@ void ConfigDialog::OnOkButtonClick(wxCommandEvent& event)
     CBSvnPluginManager::GetInstance().SetProjectManagerIntegration(CheckBoxProjectManagerIntegration->GetValue());
     CBSvnPluginManager::GetInstance().SetEditorIntegration(CheckBoxEditorIntegration->GetValue());
     CBSvnPluginManager::GetInstance().SetMaxIntegrationPerformance(CheckBoxMaxIntegration->GetValue());
+    CBSvnPluginManager::GetInstance().SetExpert(RadioBoxUI->GetSelection()==1);
 
-    EndModal(wxID_OK);
+    Close();
 }
 
 //******************************************************************************
@@ -182,7 +178,7 @@ void ConfigDialog::OnButtonGetSvnPathClick(wxCommandEvent& event)
 
 void ConfigDialog::OnButtonGetTortoiseSVNPathClick(wxCommandEvent& event)
 {
-    wxFileDialog dlg(this,                      // parent,
+    wxFileDialog dlg(this,                  // parent,
                      _("Get tortoiseproc.exe"), // message
                      _(""),                     // defaultDir
                      _("tortoiseproc.exe"),     // defaultFile
@@ -200,43 +196,7 @@ void ConfigDialog::OnButtonGetTortoiseSVNPathClick(wxCommandEvent& event)
 
 void ConfigDialog::OnButtonShowDebugClick(wxCommandEvent& event)
 {
-    CBSvnPluginManager::GetInstance().Togglelogging(true);
-}
-
-//******************************************************************************
-
-void ConfigDialog::OnButtonPopupMenuClick(wxCommandEvent& event)
-{
-    std::vector<wxString> left = ConvertMenuItemsToStrings(CBSvnPluginManager::smPopupMenu, m_all_menu_entries);
-
-    std::vector<wxString> right;
-    ConvertIndicesToMenuItems(m_all_menu_entries,convert(CBSvnPluginManager::GetInstance().GetPopupMenu()),right);
-
-    TwoPaneSelectionDialog dlg(left,right,NULL);
-    if (dlg.ShowModal()== wxID_OK)
-    {
-        std::vector<int> indices;
-        ConvertMenuItemsToIndices(m_all_menu_entries,right,indices);
-        CBSvnPluginManager::GetInstance().SetPopupMenu(convert(indices));
-    }
-}
-
-//******************************************************************************
-
-void ConfigDialog::OnButtonMainMenuClick(wxCommandEvent& event)
-{
-    std::vector<wxString> left = ConvertMenuItemsToStrings(CBSvnPluginManager::smMainMenu, m_all_menu_entries);
-
-    std::vector<wxString> right;
-    ConvertIndicesToMenuItems(m_all_menu_entries,convert(CBSvnPluginManager::GetInstance().GetMainMenu()),right);
-
-    TwoPaneSelectionDialog dlg(left,right,NULL);
-    if (dlg.ShowModal()== wxID_OK)
-    {
-        std::vector<int> indices;
-        ConvertMenuItemsToIndices(m_all_menu_entries,right,indices);
-        CBSvnPluginManager::GetInstance().SetMainMenu(convert(indices));
-    }
+    CBSvnPluginManager::GetInstance().ShowLogWindow(true);
 }
 
 //******************************************************************************

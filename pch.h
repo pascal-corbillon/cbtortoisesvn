@@ -36,9 +36,5 @@
 #include <cbworkspace.h>
 #include <ConfigManager.h>
 
-//STL
-#include <map>
-#include <vector>
-
 #endif // _PCH_H
 

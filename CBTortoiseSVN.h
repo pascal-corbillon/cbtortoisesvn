@@ -23,9 +23,7 @@
 #include <cbplugin.h> // the base class we 're inheriting
 #include <settings.h> // needed to use the Code::Blocks SDK
 #include <map>
-#include <vector>
 #include "CBSvnPluginManager.h"
-#include "menu.h"
 
 //******************************************************************************
 
@@ -37,7 +35,6 @@ class CBTortoiseSVN : public cbPlugin
         void OnAttach(); // fires when the plugin is attached to the application
         void OnRelease(bool appShutDown); // fires when the plugin is released from the application
 
-    private:
         // events
         void OnUpdateUI(wxUpdateUIEvent &event);
 
@@ -114,16 +111,9 @@ class CBTortoiseSVN : public cbPlugin
 
         //************************************************
 
-        void BuildMenuEntryList();
-        void RebuildMainMenu();
-
         void MakeReadonly( LPCTSTR lpFileName);
         void MakeReadWrite( LPCTSTR lpFileName);
     private:
-        std::vector<CBTSVN::MenuEntry> m_menu;
-        std::vector<wxString> m_popup_menu;
-        wxString m_previous_mainmenu;
-
         std::map<wxString,int> m_cache; //for increased performance
         void BuildModuleMenu(const ModuleType type, wxMenu *menu, const FileTreeData* data = 0);
         bool BuildToolBar(wxToolBar *toolBar) { return false; }

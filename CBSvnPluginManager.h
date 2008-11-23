@@ -1,6 +1,6 @@
 //******************************************************************************
 //* Name:      CBSvnPluginManager.h
-//* Purpose:   Plugin manager object (singleton)
+//* Purpose:   CBSvnPluginManager
 //* Author:    Jan van den Borst
 //* Copyright: (c) Jan van den Borst
 //* License:   GPL
@@ -14,6 +14,7 @@
 #include <memory>
 #include <wx/string.h>
 #include "utils.h"
+#include "logdialog.h"
 
 //******************************************************************************
 
@@ -53,24 +54,20 @@ namespace CBTSVN
             void SetTortoiseproc(const wxString& svn);
 
             // integration
-            bool GetMainMenuIntegration() const;
+            bool GetMainMenuIntegration();
             void SetMainMenuIntegration(bool enabled);
 
-            bool GetEditorIntegration() const;
+            bool GetEditorIntegration();
             void SetEditorIntegration(bool enabled);
 
-            bool GetProjectManagerIntegration() const;
+            bool GetProjectManagerIntegration();
             void SetProjectManagerIntegration(bool enabled);
 
-            bool GetMaxIntegrationPerformance() const;
+            bool GetMaxIntegrationPerformance();
             void SetMaxIntegrationPerformance(bool max);
 
-            // menu
-            wxString GetMainMenu() const;
-            void SetMainMenu(const wxString& s);
-
-            wxString GetPopupMenu() const;
-            void SetPopupMenu(const wxString& s);
+            bool GetExpert();
+            void SetExpert(bool expert_mode);
 
             // FileProjectWorkspaceBased
             enum SourceMenu
@@ -84,8 +81,7 @@ namespace CBTSVN
             {return *menus[menu];}
 
             // logging
-            void Togglelogging(bool debug)
-            { m_debug=!m_debug;}
+            void ShowLogWindow(bool visible);
 
             // lifecycle
             void Initialise();
@@ -108,9 +104,7 @@ namespace CBTSVN
             bool        m_ProjectManagerIntegration;
             bool        m_MaxIntegrationPerformance;
             bool        m_expert;
-            bool        m_debug;
-            wxString    m_mainmenu;
-            wxString    m_popupmenu;
+            std::auto_ptr<LogDialog> m_plogdialog;
     };
 
     // support functions

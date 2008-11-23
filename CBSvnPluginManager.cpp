@@ -1,6 +1,6 @@
 //******************************************************************************
 //* Name:      CBSvnPluginManager.cpp
-//* Purpose:   Plugin manager object (singleton)
+//* Purpose:   CBSvnPluginManager
 //* Author:    Jan van den Borst
 //* Copyright: (c) Jan van den Borst
 //* License:   GPL
@@ -8,8 +8,6 @@
 
 #include "pch.h"
 #include "CBSvnPluginManager.h"
-#include "LogManager.h"
-
 
 using namespace CBTSVN;
 
@@ -17,20 +15,19 @@ using namespace CBTSVN;
 
 const wxString plugin_name               = _("CBTortoiseSVN");
 const wxString svnpath                   = _("SVNPATH");
-const wxString tortoisesvnpath           = _("TORTOISE_SVN_PATH");
-const wxString mainmenuintegration       = _("MAINMENU_INTEGRATION");
-const wxString editorintegration         = _("EDITOR_INTEGRATION");
-const wxString projectmanagerintegration = _("PROJECT_MANAGER_INTEGRATION");
-const wxString maxintegrationperformance = _("MAX_INTEGRATION_PERFORMANCE");
-const wxString mainmenu                  = _("MAINMENU");
-const wxString popupmenu                 = _("POPUPMENU");
+const wxString tortoisesvnpath           = _("TORTOISESVNPATH");
+const wxString mainmenuintegration       = _("MAINMENUINTEGRATION");
+const wxString editorintegration         = _("EDITORINTEGRATION");
+const wxString projectmanagerintegration = _("PROJECTMANAGERINTEGRATION");
+const wxString maxintegrationperformance = _("MAXINTEGRATIONPERFORMANCE");
+const wxString expert                    = _("EXPERT");
 
 //******************************************************************************
 
 class MenuCmd : public IMenuCmd
 {
     public:
-        MenuCmd():m_FileBased(true), m_ProjectBased(false), m_WorkspaceBased(false){}
+        MenuCmd() :m_FileBased(true), m_ProjectBased(false), m_WorkspaceBased(false){}
         bool GetFileBased() const {return m_FileBased;}
         void SetFileBased(bool FileBased){m_FileBased=FileBased;}
         bool GetProjectBased() const {return m_ProjectBased;}
@@ -63,7 +60,7 @@ void CBTSVN::LogMenu(const IMenuCmd& menu)
 //******************************************************************************
 
 CBSvnPluginManager::CBSvnPluginManager() :
-        m_debug(false)
+        m_plogdialog(NULL)
 {
     wxString value;
 
@@ -91,11 +88,9 @@ CBSvnPluginManager::CBSvnPluginManager() :
     if (ReadStringFromGlobalInifile(plugin_name, maxintegrationperformance,value))
         m_MaxIntegrationPerformance=(value==_("1"));
 
-    if (ReadStringFromGlobalInifile(plugin_name, mainmenu, value))
-        m_mainmenu=value;
-
-    if (ReadStringFromGlobalInifile(plugin_name, popupmenu, value))
-        m_popupmenu=value;
+    m_expert=false;
+    if (ReadStringFromGlobalInifile(plugin_name, expert,value))
+        m_expert=(value==_("1"));
 
     for (int i=0; i< smNumSourceMenu;++i)
         menus[i].reset(new MenuCmd);
@@ -141,7 +136,7 @@ void CBSvnPluginManager::SetTortoiseproc(const wxString& tortoiseproc)
 
 //******************************************************************************
 
-bool CBSvnPluginManager::GetMainMenuIntegration() const
+bool CBSvnPluginManager::GetMainMenuIntegration()
 {
     return m_MainMenuIntegration;
 }
@@ -156,7 +151,7 @@ void CBSvnPluginManager::SetMainMenuIntegration(bool enabled)
 
 //******************************************************************************
 
-bool CBSvnPluginManager::GetEditorIntegration() const
+bool CBSvnPluginManager::GetEditorIntegration()
 {
     return m_EditorIntegration;
 }
@@ -171,7 +166,7 @@ void CBSvnPluginManager::SetEditorIntegration(bool enabled)
 
 //******************************************************************************
 
-bool CBSvnPluginManager::GetProjectManagerIntegration() const
+bool CBSvnPluginManager::GetProjectManagerIntegration()
 {
     return m_ProjectManagerIntegration;
 }
@@ -186,7 +181,7 @@ void CBSvnPluginManager::SetProjectManagerIntegration(bool enabled)
 
 //******************************************************************************
 
-bool CBSvnPluginManager::GetMaxIntegrationPerformance() const
+bool CBSvnPluginManager::GetMaxIntegrationPerformance()
 {
     return m_MaxIntegrationPerformance;
 }
@@ -201,42 +196,43 @@ void CBSvnPluginManager::SetMaxIntegrationPerformance(bool max)
 
 //******************************************************************************
 
-wxString CBSvnPluginManager::GetMainMenu() const
+bool CBSvnPluginManager::GetExpert()
 {
-    return m_mainmenu;
+    return m_expert;
 }
 
 //******************************************************************************
 
-void CBSvnPluginManager::SetMainMenu(const wxString& s)
+void CBSvnPluginManager::SetExpert(bool expert_mode)
 {
-    if (WriteStringToGlobalInifile(plugin_name, mainmenu, s))
-        m_mainmenu=s;
-}
-
-//******************************************************************************
-
-wxString CBSvnPluginManager::GetPopupMenu() const
-{
-    return m_popupmenu;
-}
-
-//******************************************************************************
-
-void CBSvnPluginManager::SetPopupMenu(const wxString& s)
-{
-    if (WriteStringToGlobalInifile(plugin_name, popupmenu, s))
-        m_popupmenu=s;
+    if (WriteStringToGlobalInifile(plugin_name, expert, wxString::Format(_("%d"),expert_mode)))
+        m_expert=expert_mode;
 }
 
 //******************************************************************************
 
 void CBSvnPluginManager::OnLogEvent(const wxString& msg)
 {
-    if (!m_debug)
-        return;
+    if (m_plogdialog.get())
+        m_plogdialog->Log(msg);
+}
 
-    Manager::Get()->GetLogManager()->Log(_T("CBTortoiseSVN: ") + msg);
+//******************************************************************************
+
+void CBSvnPluginManager::ShowLogWindow(bool visible)
+{
+    if (visible)
+    {
+        if (!m_plogdialog.get())
+            m_plogdialog.reset(new LogDialog(NULL));
+
+        if (!m_plogdialog.get())
+            return;
+
+        m_plogdialog->Show();
+    }
+    else
+        m_plogdialog.reset();
 }
 
 //******************************************************************************
@@ -244,11 +240,8 @@ void CBSvnPluginManager::OnLogEvent(const wxString& msg)
 bool CBSvnPluginManager::FileUnderVersionControl(const wxString& filename)
 {
     wxString output;
-    wxString command = wxString(_(" status \"")) + filename + wxString(_("\""));
-    int exit_code = Run(GetSvn(),_("c:\\"),command , output);
-    Logger::GetInstance().log(_("Executed: ") + GetSvn() + command);
-    Logger::GetInstance().log(_("Output: ") + output);
-    return (exit_code==0) && (output.Find(_("is not a working copy"))==-1) && (output.Find(_("?"))==-1);
+    int exit_code = Run(GetSvn(),_("c:\\"), wxString(_(" status \"")) + filename + wxString(_("\"")), output);
+    return (exit_code==0) && (output.Find(_("is not a working copy"))==-1);
 }
 
 //******************************************************************************
@@ -308,6 +301,7 @@ void CBSvnPluginManager::Initialise()
 void CBSvnPluginManager::Shutdown()
 {
     Logger::GetInstance().Unsubscribe(*this);
+    ShowLogWindow(false);
 }
 
 //******************************************************************************

@@ -79,28 +79,22 @@
 									<object class="wxStaticBox" name="ID_STATICBOX3" variable="StaticBox3" member="yes">
 										<label>Performance</label>
 										<pos>16,128</pos>
-										<size>408,44</size>
+										<size>392,44</size>
 									</object>
 									<object class="wxCheckBox" name="ID_CHECKBOX4" variable="CheckBoxMaxIntegration" member="yes">
 										<label>Don&apos;t check if files are under version control (improves performance)</label>
 										<pos>32,148</pos>
 									</object>
-									<object class="wxStaticBox" name="ID_STATICBOX4" variable="StaticBox4" member="yes">
-										<label>Menu</label>
+									<object class="wxRadioBox" name="ID_RADIOBOXUI" variable="RadioBoxUI" member="yes">
+										<label>User interface</label>
+										<content>
+											<item>Simple</item>
+											<item>Expert</item>
+										</content>
+										<default>-1</default>
 										<pos>232,8</pos>
-										<size>192,112</size>
-									</object>
-									<object class="wxButton" name="ID_BUTTON6" variable="ButtonMainMenu" member="yes">
-										<label>Edit main menu...</label>
-										<pos>248,32</pos>
-										<size>160,32</size>
-										<handler function="OnButtonMainMenuClick" entry="EVT_BUTTON" />
-									</object>
-									<object class="wxButton" name="ID_BUTTON7" variable="ButtonPopupMenu" member="yes">
-										<label>Edit popup menu...</label>
-										<pos>248,72</pos>
-										<size>160,32</size>
-										<handler function="OnButtonPopupMenuClick" entry="EVT_BUTTON" />
+										<size>176,112</size>
+										<enabled>0</enabled>
 									</object>
 								</object>
 								<label>Integration</label>
