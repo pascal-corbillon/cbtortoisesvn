@@ -37,6 +37,7 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 			<Add option="-fmessage-length=0" />
 			<Add option="-fexceptions" />
 			<Add option="-Winvalid-pch" />
+			<Add option="-Wno-attributes" />
 			<Add option="-D__GNUWIN32__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DBUILDING_PLUGIN" />

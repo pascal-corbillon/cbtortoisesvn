@@ -39,7 +39,6 @@
 //STL
 #include <map>
 #include <vector>
-#include <algorithm>
 
 #endif // _PCH_H
 
