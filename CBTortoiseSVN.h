@@ -48,17 +48,17 @@ class CBTortoiseSVN : public cbPlugin
         void OnProperties(wxCommandEvent &event);
         void OnSettings(wxCommandEvent &event);
         void OnCheckForModifications(wxCommandEvent &event);
-        void OnUpdate(wxCommandEvent &event);
-        void OnFileProjectWorkspaceBased(wxCommandEvent &event);
         void OnBlame(wxCommandEvent &event);
         void OnMakeReadonly(wxCommandEvent &event);
         void OnMakeReadWrite(wxCommandEvent &event);
-        void OnExplore(wxCommandEvent &event);
-        void OnConfiguration(wxCommandEvent &event);
         void OnAbout(wxCommandEvent &event);
         void MakeReadonly( LPCTSTR lpFileName);
         void MakeReadWrite( LPCTSTR lpFileName);
     private:
+        bool FileUnderVersionControl(const wxString& filename);
+        bool Run(bool blocked, bool hidden, const wxString& command, DWORD& exit_code );
+        bool GetCurrentFilename(wxString& filename);
+        void RunSimpleTortoiseSVNCommand(const wxString& command);
         void BuildModuleMenu(const ModuleType type, wxMenu *menu, const FileTreeData* data = 0) {}
         bool BuildToolBar(wxToolBar *toolBar) { return false; }
         void RemoveToolBar(wxToolBar *toolBar) {}

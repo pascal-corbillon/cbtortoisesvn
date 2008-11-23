@@ -3,10 +3,10 @@
     <SdkVersion major="1" minor="10" release="0" />
     <Plugin name="CBTortoiseSVN">
         <Value title="Codeblocks TortoiseSVN interface" />
-        <Value version="1.50" />
-        <Value description="SVN support for win32 Codeblocks using TortoiseSVN" />
+        <Value version="1.00" />
+        <Value description="" />
         <Value author="Jan van den Borst" />
-        <Value authorEmail="Jan van den Borst" />
+        <Value authorEmail="jvdb" />
         <Value authorWebsite="http://www.codeblocks.org/" />
         <Value thanksTo="The Code::Blocks team!" />
         <Value license="GPL" />
