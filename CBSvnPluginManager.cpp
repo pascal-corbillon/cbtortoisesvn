@@ -8,8 +8,6 @@
 
 #include "pch.h"
 #include "CBSvnPluginManager.h"
-#include "LogManager.h"
-
 
 using namespace CBTSVN;
 
@@ -63,7 +61,7 @@ void CBTSVN::LogMenu(const IMenuCmd& menu)
 //******************************************************************************
 
 CBSvnPluginManager::CBSvnPluginManager() :
-        m_debug(false)
+        m_plogdialog(NULL)
 {
     wxString value;
 
@@ -233,10 +231,26 @@ void CBSvnPluginManager::SetPopupMenu(const wxString& s)
 
 void CBSvnPluginManager::OnLogEvent(const wxString& msg)
 {
-    if (!m_debug)
-        return;
+    if (m_plogdialog.get())
+        m_plogdialog->Log(msg);
+}
 
-    Manager::Get()->GetLogManager()->Log(_T("CBTortoiseSVN: ") + msg);
+//******************************************************************************
+
+void CBSvnPluginManager::ShowLogWindow(bool visible)
+{
+    if (visible)
+    {
+        if (!m_plogdialog.get())
+            m_plogdialog.reset(new LogDialog(NULL));
+
+        if (!m_plogdialog.get())
+            return;
+
+        m_plogdialog->Show();
+    }
+    else
+        m_plogdialog.reset();
 }
 
 //******************************************************************************
@@ -308,6 +322,7 @@ void CBSvnPluginManager::Initialise()
 void CBSvnPluginManager::Shutdown()
 {
     Logger::GetInstance().Unsubscribe(*this);
+    ShowLogWindow(false);
 }
 
 //******************************************************************************

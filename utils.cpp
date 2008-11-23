@@ -17,15 +17,15 @@
 using namespace CBTSVN;
 //******************************************************************************
 
-CBTSVN::Logger& CBTSVN::Logger::GetInstance()
+Logger& Logger::GetInstance()
 {
-    static CBTSVN::Logger logger;
+    static Logger logger;
     return logger;
 }
 
 //******************************************************************************
 
-void CBTSVN::Logger::log(const wxString& log)
+void Logger::log(const wxString& log)
 {
     for (event_subscribers::const_iterator it =
                 m_subscribers.begin(); it != m_subscribers.end(); ++it)
@@ -34,7 +34,7 @@ void CBTSVN::Logger::log(const wxString& log)
 
 //******************************************************************************
 
-void CBTSVN::Logger::Subscribe(ILogSink& client)
+void Logger::Subscribe(ILogSink& client)
 {
     if (std::find(m_subscribers.begin(),
                   m_subscribers.end(), &client) == m_subscribers.end())
@@ -43,7 +43,7 @@ void CBTSVN::Logger::Subscribe(ILogSink& client)
 
 //******************************************************************************
 
-void CBTSVN::Logger::Unsubscribe(ILogSink& client)
+void Logger::Unsubscribe(ILogSink& client)
 {
     event_subscribers::iterator it =
         std::find(m_subscribers.begin(), m_subscribers.end(),
@@ -149,7 +149,7 @@ void ErrorMessage(const wxString& str)  //display detailed error info
     wxString message(msg);
     message.Replace(_("\r"),_(""));
     message.Replace(_("\n"),_(""));
-    CBTSVN::Logger::GetInstance().log(str + _(" --> ") + message);
+    Logger::GetInstance().log(str + _(" --> ") + message);
     LocalFree(msg);
 }
 

@@ -109,14 +109,9 @@
 								<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
 									<pos>124,8</pos>
 									<object class="wxButton" name="ID_BUTTON4" variable="ButtonShowDebug" member="yes">
-										<label>Toggle debug on/off</label>
+										<label>Show debug window</label>
 										<pos>16,16</pos>
-										<size>128,23</size>
 										<handler function="OnButtonShowDebugClick" entry="EVT_BUTTON" />
-									</object>
-									<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
-										<label>Note: The CBTortoiseSVN plugin logs to the Code::Blocks log tab. </label>
-										<pos>16,48</pos>
 									</object>
 								</object>
 								<label>Misc.</label>

@@ -14,6 +14,7 @@
 #include <memory>
 #include <wx/string.h>
 #include "utils.h"
+#include "logdialog.h"
 
 //******************************************************************************
 
@@ -84,8 +85,7 @@ namespace CBTSVN
             {return *menus[menu];}
 
             // logging
-            void Togglelogging(bool debug)
-            { m_debug=!m_debug;}
+            void ShowLogWindow(bool visible);
 
             // lifecycle
             void Initialise();
@@ -108,9 +108,9 @@ namespace CBTSVN
             bool        m_ProjectManagerIntegration;
             bool        m_MaxIntegrationPerformance;
             bool        m_expert;
-            bool        m_debug;
             wxString    m_mainmenu;
             wxString    m_popupmenu;
+            std::auto_ptr<LogDialog> m_plogdialog;
     };
 
     // support functions

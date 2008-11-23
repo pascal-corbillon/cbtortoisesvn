@@ -15,13 +15,15 @@
 using namespace CBTSVN;
 
 //(*IdInit(ConfigDialog)
+const long ConfigDialog::ID_NOTEBOOK1 = wxNewId();
+const long ConfigDialog::ID_PANEL2 = wxNewId();
 const long ConfigDialog::ID_STATICTEXT1 = wxNewId();
 const long ConfigDialog::ID_TEXTCTRL1 = wxNewId();
 const long ConfigDialog::ID_BUTTON2 = wxNewId();
 const long ConfigDialog::ID_STATICTEXT2 = wxNewId();
 const long ConfigDialog::ID_TEXTCTRL2 = wxNewId();
 const long ConfigDialog::ID_BUTTON5 = wxNewId();
-const long ConfigDialog::ID_PANEL2 = wxNewId();
+const long ConfigDialog::ID_PANEL3 = wxNewId();
 const long ConfigDialog::ID_STATICBOX1 = wxNewId();
 const long ConfigDialog::ID_STATICBOX2 = wxNewId();
 const long ConfigDialog::ID_CHECKBOX1 = wxNewId();
@@ -33,11 +35,8 @@ const long ConfigDialog::ID_CHECKBOX4 = wxNewId();
 const long ConfigDialog::ID_STATICBOX4 = wxNewId();
 const long ConfigDialog::ID_BUTTON6 = wxNewId();
 const long ConfigDialog::ID_BUTTON7 = wxNewId();
-const long ConfigDialog::ID_PANEL3 = wxNewId();
-const long ConfigDialog::ID_BUTTON4 = wxNewId();
-const long ConfigDialog::ID_STATICTEXT4 = wxNewId();
 const long ConfigDialog::ID_PANEL1 = wxNewId();
-const long ConfigDialog::ID_NOTEBOOK1 = wxNewId();
+const long ConfigDialog::ID_BUTTON4 = wxNewId();
 const long ConfigDialog::ID_BUTTON1 = wxNewId();
 const long ConfigDialog::ID_BUTTON3 = wxNewId();
 //*)
@@ -80,8 +79,7 @@ ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entrie
     ButtonMainMenu = new wxButton(Panel2, ID_BUTTON6, _("Edit main menu..."), wxPoint(248,32), wxSize(160,32), 0, wxDefaultValidator, _T("ID_BUTTON6"));
     ButtonPopupMenu = new wxButton(Panel2, ID_BUTTON7, _("Edit popup menu..."), wxPoint(248,72), wxSize(160,32), 0, wxDefaultValidator, _T("ID_BUTTON7"));
     Panel1 = new wxPanel(Notebook1, ID_PANEL1, wxPoint(124,8), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
-    ButtonShowDebug = new wxButton(Panel1, ID_BUTTON4, _("Toggle debug on/off"), wxPoint(16,16), wxSize(128,23), 0, wxDefaultValidator, _T("ID_BUTTON4"));
-    StaticText4 = new wxStaticText(Panel1, ID_STATICTEXT4, _("Note: The CBTortoiseSVN plugin logs to the Code::Blocks log tab. "), wxPoint(16,48), wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+    ButtonShowDebug = new wxButton(Panel1, ID_BUTTON4, _("Show debug window"), wxPoint(16,16), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
     Notebook1->AddPage(PanelPath, _("Paths"), false);
     Notebook1->AddPage(Panel2, _("Integration"), false);
     Notebook1->AddPage(Panel1, _("Misc."), false);
@@ -96,7 +94,6 @@ ConfigDialog::ConfigDialog(const std::vector<CBTSVN::MenuEntry>& all_menu_entrie
     FlexGridSizer1->Add(BoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
-
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonGetSvnPathClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonGetTortoiseSVNPathClick);
     Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ConfigDialog::OnButtonMainMenuClick);
@@ -200,7 +197,7 @@ void ConfigDialog::OnButtonGetTortoiseSVNPathClick(wxCommandEvent& event)
 
 void ConfigDialog::OnButtonShowDebugClick(wxCommandEvent& event)
 {
-    CBSvnPluginManager::GetInstance().Togglelogging(true);
+    CBSvnPluginManager::GetInstance().ShowLogWindow(true);
 }
 
 //******************************************************************************

@@ -14,15 +14,15 @@
 
 
 //(*Headers(ConfigDialog)
+#include <wx/button.h>
+#include <wx/checkbox.h>
+#include <wx/dialog.h>
 #include <wx/notebook.h>
+#include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
-#include <wx/statbox.h>
-#include <wx/panel.h>
-#include <wx/button.h>
-#include <wx/dialog.h>
 //*)
 
 class ConfigDialog: public wxDialog
@@ -33,13 +33,15 @@ class ConfigDialog: public wxDialog
 		virtual ~ConfigDialog();
 
 		//(*Identifiers(ConfigDialog)
+		static const long ID_NOTEBOOK1;
+		static const long ID_PANEL2;
 		static const long ID_STATICTEXT1;
 		static const long ID_TEXTCTRL1;
 		static const long ID_BUTTON2;
 		static const long ID_STATICTEXT2;
 		static const long ID_TEXTCTRL2;
 		static const long ID_BUTTON5;
-		static const long ID_PANEL2;
+		static const long ID_PANEL3;
 		static const long ID_STATICBOX1;
 		static const long ID_STATICBOX2;
 		static const long ID_CHECKBOX1;
@@ -51,11 +53,8 @@ class ConfigDialog: public wxDialog
 		static const long ID_STATICBOX4;
 		static const long ID_BUTTON6;
 		static const long ID_BUTTON7;
-		static const long ID_PANEL3;
-		static const long ID_BUTTON4;
-		static const long ID_STATICTEXT4;
 		static const long ID_PANEL1;
-		static const long ID_NOTEBOOK1;
+		static const long ID_BUTTON4;
 		static const long ID_BUTTON1;
 		static const long ID_BUTTON3;
 		//*)
@@ -74,34 +73,33 @@ class ConfigDialog: public wxDialog
 		//*)
 
 		//(*Declarations(ConfigDialog)
-		wxButton* ButtonPopupMenu;
+		wxFlexGridSizer* FlexGridSizer1;
+		wxBoxSizer* BoxSizer2;
 		wxNotebook* Notebook1;
-		wxButton* ButtonGetTortoiseSVNPath;
+		wxPanel* PanelPath;
+		wxStaticText* StaticText1;
+		wxTextCtrl* TextCtrlSVNPath;
+		wxButton* ButtonGetSvnPath;
 		wxStaticText* StaticText2;
 		wxTextCtrl* TextCtrlTortoiseSVNPath;
-		wxButton* ButtonGetSvnPath;
-		wxCheckBox* CheckBoxEditorIntegration;
-		wxCheckBox* CheckBoxMaxIntegration;
-		wxPanel* Panel1;
-		wxCheckBox* CheckBoxMainMenuIntegration;
-		wxStaticText* StaticText1;
-		wxBoxSizer* BoxSizer2;
-		wxButton* OkButton;
-		wxStaticText* StaticText3;
-		wxStaticBox* StaticBox1;
-		wxButton* ButtonMainMenu;
-		wxStaticBox* StaticBox2;
-		wxStaticBox* StaticBox3;
-		wxButton* ButtonShowDebug;
+		wxButton* ButtonGetTortoiseSVNPath;
 		wxPanel* Panel2;
-		wxPanel* PanelPath;
+		wxStaticBox* StaticBox1;
+		wxStaticBox* StaticBox2;
+		wxCheckBox* CheckBoxMainMenuIntegration;
 		wxCheckBox* CheckBoxProjectManagerIntegration;
-		wxTextCtrl* TextCtrlSVNPath;
-		wxFlexGridSizer* FlexGridSizer1;
-		wxBoxSizer* BoxSizer3;
-		wxStaticText* StaticText4;
-		wxButton* CancelButton;
+		wxCheckBox* CheckBoxEditorIntegration;
+		wxStaticText* StaticText3;
+		wxStaticBox* StaticBox3;
+		wxCheckBox* CheckBoxMaxIntegration;
 		wxStaticBox* StaticBox4;
+		wxButton* ButtonMainMenu;
+		wxButton* ButtonPopupMenu;
+		wxPanel* Panel1;
+		wxButton* ButtonShowDebug;
+		wxBoxSizer* BoxSizer3;
+		wxButton* CancelButton;
+		wxButton* OkButton;
 		//*)
 
 	private:
