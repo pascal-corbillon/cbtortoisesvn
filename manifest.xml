@@ -7,7 +7,7 @@
         <Value description="SVN support for win32 Codeblocks using TortoiseSVN" />
         <Value author="Jan van den Borst" />
         <Value authorEmail="Jan van den Borst" />
-        <Value authorWebsite="http://tools.assembla.com/svn/CBTortoiseSVN/" />
+        <Value authorWebsite="http://www.codeblocks.org/" />
         <Value thanksTo="The Code::Blocks team!" />
         <Value license="GPL" />
     </Plugin>

@@ -382,24 +382,7 @@ wxString CBTSVN::GetProjectFilename()
 
 wxString CBTSVN::GetProjectIniFile(const wxString& plugin_name)
 {
-    wxString filename = GetProjectFilename();
-
-    if (filename==_(""))
-        return _("");
-
-    return GetBaseDir(filename) + _("\\") + plugin_name + _(".ini");
-}
-
-//******************************************************************************
-
-wxString CBTSVN::GetWorkspaceIniFile(const wxString& plugin_name)
-{
-    wxString filename = GetWorkspaceFilename();
-
-    if ( filename==_(""))
-        return _("");
-
-    return GetBaseDir(filename) + _("\\") + plugin_name + _(".ini");
+    return GetBaseDir(GetProjectFilename()) + plugin_name + _(".ini");
 }
 
 //******************************************************************************
@@ -412,25 +395,17 @@ bool CBTSVN::IniFileHasEntry(const wxString& plugin_name, const wxString& inifil
 
 //******************************************************************************
 
+bool CBTSVN::ReadStringFromProjectInifile(const wxString& plugin_name, const wxString& key, wxString& value)
+{
+    return ReadStringFromInifile(plugin_name, GetProjectIniFile(plugin_name), key,value);
+}
+
+//******************************************************************************
+
 bool CBTSVN::ReadStringFromInifile(const wxString& plugin_name, const wxString& inifile, const wxString& key, wxString& value)
 {
     wxFileConfig configFile(plugin_name, wxT("Code::Blocks"), inifile);
     return configFile.Read(key,&value);
-}
-
-//******************************************************************************
-
-bool CBTSVN::WriteStringToInifile(const wxString& plugin_name, const wxString& inifile, const wxString& key, const wxString& value)
-{
-    wxFileConfig configFile(plugin_name, wxT("Code::Blocks"), inifile);
-    return configFile.Write(key, value);
-}
-
-//******************************************************************************
-
-bool CBTSVN::ReadStringFromProjectInifile(const wxString& plugin_name, const wxString& key, wxString& value)
-{
-    return ReadStringFromInifile(plugin_name, GetProjectIniFile(plugin_name), key,value);
 }
 
 //******************************************************************************
@@ -442,37 +417,10 @@ bool CBTSVN::WriteStringToProjectInifile(const wxString& plugin_name, const wxSt
 
 //******************************************************************************
 
-bool CBTSVN::ReadStringFromWorkspaceInifile(const wxString& plugin_name, const wxString& key, wxString& value)
+bool CBTSVN::WriteStringToInifile(const wxString& plugin_name, const wxString& inifile, const wxString& key, const wxString& value)
 {
-    return ReadStringFromInifile(plugin_name, GetWorkspaceIniFile(plugin_name), key,value);
-}
-
-//******************************************************************************
-
-bool CBTSVN::WriteStringToWorkspaceInifile(const wxString& plugin_name, const wxString& key, const wxString& value)
-{
-    return WriteStringToInifile(plugin_name, GetWorkspaceIniFile(plugin_name), key, value);
-}
-
-//******************************************************************************
-
-wxString CBTSVN::GetCustomDir(const wxString& plugin_name, const wxString& filename, const wxString& key_custom_location, const wxString& key_custom_relative)
-{
-    wxString dir,rel;
-    ReadStringFromProjectInifile(plugin_name, key_custom_location, dir);
-
-    ReadStringFromProjectInifile(plugin_name, key_custom_relative, rel);
-    bool IsRelative = (rel==_("1") || rel==_(""));
-
-    if (!IsRelative)
-        return dir;
-
-    wxString basedir=GetBaseDir(filename);
-    wxFileName directory;
-    directory.AssignDir(dir);
-    directory.MakeAbsolute(basedir);
-
-    return directory.GetFullPath();
+    wxFileConfig configFile(plugin_name, wxT("Code::Blocks"), inifile);
+    return configFile.Write(key, value);
 }
 
 //******************************************************************************

@@ -71,8 +71,6 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 		<Unit filename="CBTortoiseSVN.h" />
 		<Unit filename="ConfigDialog.cpp" />
 		<Unit filename="ConfigDialog.h" />
-		<Unit filename="CustomConfigDialog.cpp" />
-		<Unit filename="CustomConfigDialog.h" />
 		<Unit filename="TwoPaneSelectionDialog.cpp" />
 		<Unit filename="TwoPaneSelectionDialog.h" />
 		<Unit filename="manifest.xml" />
@@ -97,7 +95,6 @@ Hosted at http://tools.assembla.com/svn/CBTortoiseSVN]]>
 				<resources>
 					<wxDialog wxs="wxsmith/ConfigDialog.wxs" src="ConfigDialog.cpp" hdr="ConfigDialog.h" name="ConfigDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/TwoPaneSelectionDialog.wxs" src="TwoPaneSelectionDialog.cpp" hdr="TwoPaneSelectionDialog.h" name="TwoPaneSelectionDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/CustomConfigDialog.wxs" src="CustomConfigDialog.cpp" hdr="CustomConfigDialog.h" name="CustomConfigDialog" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

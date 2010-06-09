@@ -15,56 +15,35 @@ using namespace CBTSVN;
 
 //******************************************************************************
 
+const wxString plugin_name               = _("CBTortoiseSVN");
+const wxString svnpath                   = _("SVNPATH");
+const wxString tortoisesvnpath           = _("TORTOISE_SVN_PATH");
+const wxString mainmenuintegration       = _("MAINMENU_INTEGRATION");
+const wxString editorintegration         = _("EDITOR_INTEGRATION");
+const wxString projectmanagerintegration = _("PROJECT_MANAGER_INTEGRATION");
+const wxString maxintegrationperformance = _("MAX_INTEGRATION_PERFORMANCE");
+const wxString mainmenu                  = _("MAINMENU");
+const wxString popupmenu                 = _("POPUPMENU");
+
+//******************************************************************************
+
 class MenuCmd : public IMenuCmd
 {
     public:
-        MenuCmd():m_FileBased(true), m_ProjectBased(false), m_WorkspaceBased(false),m_custom(false){}
-        bool GetFileBased() const
-        {
-            return m_FileBased;
-        }
-        void SetFileBased(bool FileBased)
-        {
-            m_FileBased=FileBased;
-        }
-        bool GetProjectBased() const
-        {
-            return m_ProjectBased;
-        }
-        void SetProjectBased(bool ProjectBased)
-        {
-            m_ProjectBased=ProjectBased;
-        }
-        bool GetWorkspaceBased() const
-        {
-            return m_WorkspaceBased;
-        }
-        void SetWorkspaceBased(bool ProjectBased)
-        {
-            m_WorkspaceBased=ProjectBased;
-        }
-        void SetCustom(bool custom)
-        {
-            m_custom=custom;
-        }
-        bool GetCustom()const
-        {
-            return m_custom;
-        }
-        wxString GetFilename() const
-        {
-            return m_filename;
-        }
-        void SetFilename(const wxString& filename)
-        {
-            m_filename=filename;
-        }
+        MenuCmd():m_FileBased(true), m_ProjectBased(false), m_WorkspaceBased(false){}
+        bool GetFileBased() const {return m_FileBased;}
+        void SetFileBased(bool FileBased){m_FileBased=FileBased;}
+        bool GetProjectBased() const {return m_ProjectBased;}
+        void SetProjectBased(bool ProjectBased) {m_ProjectBased=ProjectBased;}
+        bool GetWorkspaceBased() const {return m_WorkspaceBased;}
+        void SetWorkspaceBased(bool ProjectBased){m_WorkspaceBased=ProjectBased;}
+        wxString GetFilename() const{return m_filename;}
+        void SetFilename(const wxString& filename){m_filename=filename;}
     private:
         wxString m_filename;
         bool m_FileBased;
         bool m_ProjectBased;
         bool m_WorkspaceBased;
-        bool m_custom;
 };
 
 //******************************************************************************
@@ -76,8 +55,8 @@ void CBTSVN::LogMenu(const IMenuCmd& menu)
     _("Filename: ") << menu.GetFilename() <<
     _(", Filebased: ") << wxString::Format(_("%d"),menu.GetFileBased()) <<
     _(", Projectbased: ") << wxString::Format(_("%d"),menu.GetProjectBased()) <<
-    _(", Workspacebased: ") << wxString::Format(_("%d"),menu.GetWorkspaceBased()) <<
-    _(", Custom: ") << wxString::Format(_("%d"),menu.GetCustom());
+    _(", Workspacebased: ") << wxString::Format(_("%d"),menu.GetWorkspaceBased());
+
     Logger::GetInstance().log(log);
 };
 
@@ -286,16 +265,8 @@ void CBSvnPluginManager::RunSimpleTortoiseSVNCommand(const IMenuCmd& menu,const 
         if (filename==_(""))
             return;
 
-        if (menu.GetProjectBased() || menu.GetWorkspaceBased())
-            if (menu.GetCustom())
-            {
-                if (menu.GetProjectBased())
-                    filename=GetCustomDir(plugin_name,filename,project_custom_location,project_custom_relative);
-                else
-                    filename=GetCustomDir(plugin_name,filename,workspace_custom_location,workspace_custom_relative);
-            }
-            else
-                filename=CBTSVN::GetBaseDir(filename);
+        if (menu.GetProjectBased()||menu.GetWorkspaceBased())
+            filename=CBTSVN::GetBaseDir(filename);
 
         if (menu.GetFileBased())
             if (!FileUnderVersionControl(filename))

@@ -92,20 +92,15 @@ namespace CBTSVN
     bool ReadStringFromGlobalInifile(const wxString& plugin_name, const wxString& key, wxString& value);
     bool WriteStringToGlobalInifile(const wxString& plugin_name, const wxString& key, const wxString& value);
 
-    // project / workspace related settings
+    // project related settings
     wxString GetProjectIniFile(const wxString& plugin_name);
-    wxString GetWorkspaceIniFile(const wxString& plugin_name);
     bool ReadStringFromProjectInifile(const wxString& plugin_name, const wxString& key, wxString& value);
     bool WriteStringToProjectInifile(const wxString& plugin_name, const wxString& key, const wxString& value);
-    bool ReadStringFromWorkspaceInifile(const wxString& plugin_name, const wxString& key, wxString& value);
-    bool WriteStringToWorkspaceInifile(const wxString& plugin_name, const wxString& key, const wxString& value);
 
     // general
     bool IniFileHasEntry(const wxString& plugin_name, const wxString& inifile, const wxString& key);
     bool ReadStringFromInifile(const wxString& plugin_name, const wxString& inifile, const wxString& key, wxString& value);
     bool WriteStringToInifile(const wxString& plugin_name, const wxString& inifile, const wxString& key, const wxString& value);
-
-    wxString GetCustomDir(const wxString& plugin_name, const wxString& filename, const wxString& key_custom_location, const wxString& key_custom_relative);
 };
 
 //******************************************************************************

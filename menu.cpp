@@ -82,7 +82,7 @@ void CBTSVN::ConvertIndicesToMenuItems(
     items.clear();
     for (size_t i=0;i<indices.size();i++)
         if (indices.at(i)==-1)
-            items.push_back(CBTSVN::separator);
+            items.push_back(_("-----------------"));
         else
         {
             size_t index = indices.at(i);

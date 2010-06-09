@@ -10,7 +10,6 @@
 #include "CBTortoiseSVN.h"
 #include "ConfigDialog.h"
 #include "TwoPaneSelectionDialog.h"
-#include "CustomConfigDialog.h"
 
 using namespace CBTSVN;
 
@@ -37,7 +36,6 @@ static int idMakeReadonly          = wxNewId();
 static int idMakeReadWrite         = wxNewId();
 static int idAbout                 = wxNewId();
 static int idConfiguration         = wxNewId();
-static int idCustomConfig          = wxNewId();
 static int idExplore               = wxNewId();
 static int idCheckout              = wxNewId();
 static int idCleanup               = wxNewId();
@@ -46,7 +44,6 @@ static int idConflictEditor        = wxNewId();
 static int idFileBased             = wxNewId();
 static int idProjectBased          = wxNewId();
 static int idWorkspaceBased        = wxNewId();
-static int idUseCustomSettings     = wxNewId();
 
 // popup menu
 static int idPopupAdd              = wxNewId();
@@ -100,10 +97,8 @@ BEGIN_EVENT_TABLE(CBTortoiseSVN, cbPlugin)
     EVT_MENU(idMakeReadWrite,         CBTortoiseSVN::OnMakeReadWrite)
     EVT_MENU(idAbout,                 CBTortoiseSVN::OnAbout)
     EVT_MENU(idConfiguration,         CBTortoiseSVN::OnConfiguration)
-    EVT_MENU(idCustomConfig,          CBTortoiseSVN::OnCustomConfig)
     EVT_MENU(idFileBased,             CBTortoiseSVN::OnFileProjectWorkspaceBased)
     EVT_MENU(idProjectBased,          CBTortoiseSVN::OnFileProjectWorkspaceBased)
-    EVT_MENU(idUseCustomSettings,     CBTortoiseSVN::OnFileProjectWorkspaceBased)
     EVT_MENU(idWorkspaceBased,        CBTortoiseSVN::OnFileProjectWorkspaceBased)
     EVT_MENU(idCheckout,              CBTortoiseSVN::OnCheckout)
     EVT_MENU(idCleanup,               CBTortoiseSVN::OnCleanup)
@@ -130,33 +125,32 @@ BEGIN_EVENT_TABLE(CBTortoiseSVN, cbPlugin)
     EVT_MENU(idPopupMerge,            CBTortoiseSVN::OnPopupMerge)
     EVT_MENU(idPopupConflictEditor,   CBTortoiseSVN::OnPopupConflictEditor)
 
-    EVT_UPDATE_UI(idAdd,                CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idCommit,             CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idDiffWithBase,       CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idLog,                CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idRepobrowser,        CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idRevert,             CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idRevisiongraph,      CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idLock,               CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idUnLock,             CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idModifications,      CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idUpdate,             CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idBlame,              CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idProperties,         CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idExplore,            CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idSettings,           CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idMakeReadonly,       CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idMakeReadWrite,      CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idAbout,              CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idConfiguration,      CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idFileBased,          CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idProjectBased,       CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idUseCustomSettings,  CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idWorkspaceBased,     CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idCheckout,           CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idCleanup,            CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idMerge,              CBTortoiseSVN::OnUpdateUI)
-    EVT_UPDATE_UI(idConflictEditor,     CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idAdd,              CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idCommit,           CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idDiffWithBase,     CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idLog,              CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idRepobrowser,      CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idRevert,           CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idRevisiongraph,    CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idLock,             CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idUnLock,           CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idModifications,    CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idUpdate,           CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idBlame,            CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idProperties,       CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idExplore,          CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idSettings,         CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idMakeReadonly,     CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idMakeReadWrite,    CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idAbout,            CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idConfiguration,    CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idFileBased,        CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idProjectBased,     CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idWorkspaceBased,   CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idCheckout,         CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idCleanup,          CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idMerge,            CBTortoiseSVN::OnUpdateUI)
+    EVT_UPDATE_UI(idConflictEditor,   CBTortoiseSVN::OnUpdateUI)
 
 END_EVENT_TABLE()
 
@@ -292,10 +286,6 @@ void CBTortoiseSVN::BuildMenu(wxMenuBar *menuBar)
         menuBar->Append(submenu,_("TortoiseSVN"));
     else
         menuBar->Insert(ToolsPos,submenu,_("TortoiseSVN"));
-
-    submenu->FindItem(idUseCustomSettings)->Enable(!MAIN_MENU.GetFileBased());
-    submenu->FindItem(idCustomConfig)->Enable(!MAIN_MENU.GetFileBased());
-
     m_previous_mainmenu=CBSvnPluginManager::GetInstance().GetMainMenu();
 }
 
@@ -433,43 +423,39 @@ void CBTortoiseSVN::BuildMenuEntryList()
 #define ADD(a,b,c,d,e,f,g,h,i,j,k) m_menu.push_back(MenuEntry(a,b,c,d,e,f,g,h,i,j,k))
 #define KINDNORM   MenuEntry::mekNormal
 #define KINDRADIO  MenuEntry::mekRadio
-#define KINDCHECK  MenuEntry::mekCheck
 
-    //                                                           <----- based on ---->  <--required-->
-    //  id main menu            id popup              kind       file project workspace  main   popup          name                                 text                             help
-    ADD(-1,                     -1,                   KINDNORM,  false, false, false,   true,   false, _("workbased_based"),            _("Workspace based commands"),   _("Workspace based commands"));
-    ADD(idFileBased,            -1,                   KINDRADIO, false, false, false,   true,   false, _("file_based"),                 _("File based commands"),        _("File based commands"));
-    ADD(idProjectBased,         -1,                   KINDRADIO, false, false, false,   true,   false, _("project_based"),              _("Project based commands"),     _("Project based commands"));
-    ADD(idWorkspaceBased,       -1,                   KINDRADIO, false, false, false,   true,   false, _("workbased_based"),            _("Workspace based commands"),   _("Workspace based commands"));
-    ADD(idUseCustomSettings,    -1,                   KINDCHECK, false, false, false,   true,   false, _("Use custom settings"),        _("Use custom settings"),        _("Use custom settings"));
-    ADD(-1,                     -1,                   KINDNORM,  false, false, false,   true,   true,  _(""),                           _(""),                           _(""));
-    ADD(idCustomConfig,         -1,                   KINDNORM,  false, false, false,   true,   false, _("Custom"),                     _("Custom settings..."),         _("Custom settings"));
-    ADD(-1,                     -1,                   KINDNORM,  false, false, false,   true,   false, _(""),                           _(""),                           _(""));
-    ADD(idConfiguration,        idConfiguration,      KINDNORM,  false, false, false,   true,   true,  _("plugin"),                     _("Plugin settings..."),         _("CBTortoiseSVN settings"));
-    ADD(-1,                     -1,                   KINDNORM,  false, false, false,   true,   false, _(""),                           _(""),                           _(""));
-    ADD(idAbout,                -1,                   KINDNORM,  true,  true,  true,    true,   false, _("about"),                      _("About..."),                   _("About CBTortoiseSVN"));
-    ADD(idAdd,                  idPopupAdd,           KINDNORM,  false, false, false,   false,  false, _("add"),                        _("Add..."),                     _("Add"));
-    ADD(idRemove,               idPopupRemove,        KINDNORM,  true,  false, false,   false,  false, _("Remove"),                     _("Remove..."),                  _("Remove"));
-    ADD(idCommit,               idPopupCommit,        KINDNORM,  true,  true,  true,    false,  false, _("commit"),                     _("Commit..."),                  _("Commit"));
-    ADD(idDiffWithBase,         idPopupDiffWithBase,  KINDNORM,  true,  true,  true,    false,  false, _("diff"),                       _("Diff with base..."),          _("Diff with base"));
-    ADD(idLog,                  idPopupLog,           KINDNORM,  true,  true,  true,    false,  false, _("log"),                        _("Log..."),                     _("Log"));
-    ADD(idRepobrowser,          idPopupRepobrowser,   KINDNORM,  true,  true,  true,    false,  false, _("repobrowser"),                _("Repobrowser..."),             _("Repobowser"));
-    ADD(idRevert,               idPopupRevert,        KINDNORM,  true,  true,  true,    false,  false, _("revert"),                     _("Revert..."),                  _("Revert"));
-    ADD(idRevisiongraph,        idPopupRevisiongraph, KINDNORM,  true,  true,  true,    false,  false, _("revisiongraph"),              _("Revisiongraph..."),           _("Revisiongraph"));
-    ADD(idLock,                 idPopupLock,          KINDNORM,  true,  true,  true,    false,  false, _("lock"),                       _("Lock..."),                    _("Lock"));
-    ADD(idUnLock,               idPopupUnLock,        KINDNORM,  true,  true,  true,    false,  false, _("unLock"),                     _("UnLock..."),                  _("UnLock"));
-    ADD(idModifications,        idPopupModifications, KINDNORM,  true,  true,  true,    false,  false, _("modifications"),              _("Check for modifications..."), _("Check for modifications"));
-    ADD(idUpdate,               idPopupUpdate,        KINDNORM,  true,  true,  true,    false,  false, _("update"),                     _("Update..."),                  _("Update"));
-    ADD(idBlame,                idPopupBlame,         KINDNORM,  true,  false, false,   false,  false, _("blame"),                      _("Blame..."),                   _("Blame"));
-    ADD(idProperties,           idPopupProperties,    KINDNORM,  false, false, false,   false,  false, _("properties"),                 _("Properties..."),              _("Properties"));
-    ADD(idSettings,             idSettings,           KINDNORM,  false, false, false,   false,  false, _("settings"),                   _("TortoiseSVN Settings..."),    _("TortoiseSVN Settings"));
-    ADD(idMakeReadonly,         -1,                   KINDNORM,  true,  false, false,   false,  false, _("readonly"),                   _("Make Readonly..."),           _("Make Readonly"));
-    ADD(idMakeReadWrite,        -1,                   KINDNORM,  true,  false, false,   false,  false, _("readwrite"),                  _("Make Read/Write..."),         _("Make Read/Write"));
-    ADD(idExplore,              idPopupExplore,       KINDNORM,  true,  true,  true,    false,  false, _("explore"),                    _("Explore..."),                 _("Explore"));
-    ADD(idCheckout,             -1,                   KINDNORM,  false, false, false,   false,  false, _("checkout"),                   _("Checkout..."),                _("Checkout"));
-    ADD(idCleanup,              idPopupCleanup,       KINDNORM,  false, true,  true,    false,  false, _("cleanup"),                    _("Cleanup..."),                 _("Cleanup"));
-    ADD(idMerge,                -1,                   KINDNORM,  true,  true,  true,    false,  false, _("merge"),                      _("Merge..."),                   _("Merge"));
-    ADD(idConflictEditor,       -1,                   KINDNORM,  true,  true,  true,    false,  false, _("conflict"),                   _("Conflict editor..."),         _("Conflict editor"));
+    //                                                     <----- based on ---->  <--required-->
+    //  id main menu      id popup              kind       file project workspace  main   popup          name                     text                             help
+    ADD(-1,               -1,                   KINDNORM,  false, false, false,   true,   false, _("workbased_based"), _("Workspace based commands"),   _("Workspace based commands"));
+    ADD(idFileBased,      -1,                   KINDRADIO, false, false, false,   true,   false, _("file_based"),      _("File based commands"),        _("File based commands"));
+    ADD(idProjectBased,   -1,                   KINDRADIO, false, false, false,   true,   false, _("project_based"),   _("Project based commands"),     _("Project based commands"));
+    ADD(idWorkspaceBased, -1,                   KINDRADIO, false, false, false,   true,   false, _("workbased_based"), _("Workspace based commands"),   _("Workspace based commands"));
+    ADD(-1,               -1,                   KINDNORM,  false, false, false,   true,   true,  _(""),                _(""),                           _(""));
+    ADD(idConfiguration,  idConfiguration,      KINDNORM,  false, false, false,   true,   true,  _("plugin"),          _("Plugin settings..."),         _("CBTortoiseSVN settings"));
+    ADD(-1,               -1,                   KINDNORM,  false, false, false,   true,   false, _(""),                _(""),                           _(""));
+    ADD(idAbout,          -1,                   KINDNORM,  true,  true,  true,    true,   false, _("about"),           _("About..."),                   _("About CBTortoiseSVN"));
+    ADD(idAdd,            idPopupAdd,           KINDNORM,  false, false, false,   false,  false, _("add"),             _("Add..."),                     _("Add"));
+    ADD(idRemove,         idPopupRemove,        KINDNORM,  true,  false, false,   false,  false, _("Remove"),          _("Remove..."),                  _("Remove"));
+    ADD(idCommit,         idPopupCommit,        KINDNORM,  true,  true,  true,    false,  false, _("commit"),          _("Commit..."),                  _("Commit"));
+    ADD(idDiffWithBase,   idPopupDiffWithBase,  KINDNORM,  true,  true,  true,    false,  false, _("diff"),            _("Diff with base..."),          _("Diff with base"));
+    ADD(idLog,            idPopupLog,           KINDNORM,  true,  true,  true,    false,  false, _("log"),             _("Log..."),                     _("Log"));
+    ADD(idRepobrowser,    idPopupRepobrowser,   KINDNORM,  true,  true,  true,    false,  false, _("repobrowser"),     _("Repobrowser..."),             _("Repobowser"));
+    ADD(idRevert,         idPopupRevert,        KINDNORM,  true,  true,  true,    false,  false, _("revert"),          _("Revert..."),                  _("Revert"));
+    ADD(idRevisiongraph,  idPopupRevisiongraph, KINDNORM,  true,  true,  true,    false,  false, _("revisiongraph"),   _("Revisiongraph..."),           _("Revisiongraph"));
+    ADD(idLock,           idPopupLock,          KINDNORM,  true,  true,  true,    false,  false, _("lock"),            _("Lock..."),                    _("Lock"));
+    ADD(idUnLock,         idPopupUnLock,        KINDNORM,  true,  true,  true,    false,  false, _("unLock"),          _("UnLock..."),                  _("UnLock"));
+    ADD(idModifications,  idPopupModifications, KINDNORM,  true,  true,  true,    false,  false, _("modifications"),   _("Check for modifications..."), _("Check for modifications"));
+    ADD(idUpdate,         idPopupUpdate,        KINDNORM,  true,  true,  true,    false,  false, _("update"),          _("Update..."),                  _("Update"));
+    ADD(idBlame,          idPopupBlame,         KINDNORM,  true,  false, false,   false,  false, _("blame"),           _("Blame..."),                   _("Blame"));
+    ADD(idProperties,     idPopupProperties,    KINDNORM,  false, false, false,   false,  false, _("properties"),      _("Properties..."),              _("Properties"));
+    ADD(idSettings,       idSettings,           KINDNORM,  false, false, false,   false,  false, _("settings"),        _("TortoiseSVN Settings..."),    _("TortoiseSVN Settings"));
+    ADD(idMakeReadonly,   -1,                   KINDNORM,  true,  false, false,   false,  false, _("readonly"),        _("Make Readonly..."),           _("Make Readonly"));
+    ADD(idMakeReadWrite,  -1,                   KINDNORM,  true,  false, false,   false,  false, _("readwrite"),       _("Make Read/Write..."),         _("Make Read/Write"));
+    ADD(idExplore,        idPopupExplore,       KINDNORM,  true,  true,  true,    false,  false, _("explore"),         _("Explore..."),                 _("Explore"));
+    ADD(idCheckout,       -1,                   KINDNORM,  false, false, false,   false,  false, _("checkout"),        _("Checkout..."),                _("Checkout"));
+    ADD(idCleanup,        idPopupCleanup,       KINDNORM,  false, true,  true,    false,  false, _("cleanup"),         _("Cleanup..."),                 _("Cleanup"));
+    ADD(idMerge,          -1,                   KINDNORM,  true,  true,  true,    false,  false, _("merge"),           _("Merge..."),                   _("Merge"));
+    ADD(idConflictEditor, -1,                   KINDNORM,  true,  true,  true,    false,  false, _("conflict"),        _("Conflict editor..."),         _("Conflict editor"));
 }
 
 //******************************************************************************
@@ -683,14 +669,6 @@ void CBTortoiseSVN::OnConfiguration(wxCommandEvent &event)
 
 //******************************************************************************
 
-void CBTortoiseSVN::OnCustomConfig(wxCommandEvent &event)
-{
-    CustomConfigDialog dlg(NULL);
-    dlg.ShowModal();
-}
-
-//******************************************************************************
-
 void CBTortoiseSVN::RebuildMainMenu()
 {
     m_previous_mainmenu=CBSvnPluginManager::GetInstance().GetMainMenu();
@@ -749,12 +727,6 @@ void CBTortoiseSVN::OnFileProjectWorkspaceBased(wxCommandEvent &event)
     MAIN_MENU.SetFileBased(mbar->IsChecked(idFileBased));
     MAIN_MENU.SetProjectBased(mbar->IsChecked(idProjectBased));
     MAIN_MENU.SetWorkspaceBased(mbar->IsChecked(idWorkspaceBased));
-    MAIN_MENU.SetCustom(mbar->IsChecked(idUseCustomSettings));
-    POPUP_MENU.SetCustom(mbar->IsChecked(idUseCustomSettings));
-
-    bool filebased=mbar->IsChecked(idFileBased);
-    mbar->FindItem(idUseCustomSettings)->Enable(!filebased);
-    mbar->FindItem(idCustomConfig)->Enable(!filebased);
 
     LogMenu(MAIN_MENU);
 }

@@ -63,7 +63,6 @@ class CBTortoiseSVN : public cbPlugin
         void OnMakeReadWrite(wxCommandEvent &event);
         void OnExplore(wxCommandEvent &event);
         void OnConfiguration(wxCommandEvent &event);
-        void OnCustomConfig(wxCommandEvent &event);
         void OnAbout(wxCommandEvent &event);
         void OnCheckout(wxCommandEvent &event);
         void OnCleanup(wxCommandEvent &event);

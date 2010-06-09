@@ -24,23 +24,6 @@
 
 namespace CBTSVN
 {
-    const wxString plugin_name               = _("CBTortoiseSVN");
-    const wxString svnpath                   = _("SVNPATH");
-    const wxString tortoisesvnpath           = _("TORTOISE_SVN_PATH");
-    const wxString mainmenuintegration       = _("MAINMENU_INTEGRATION");
-    const wxString editorintegration         = _("EDITOR_INTEGRATION");
-    const wxString projectmanagerintegration = _("PROJECT_MANAGER_INTEGRATION");
-    const wxString maxintegrationperformance = _("MAX_INTEGRATION_PERFORMANCE");
-    const wxString mainmenu                  = _("MAINMENU");
-    const wxString popupmenu                 = _("POPUPMENU");
-
-    const wxString project_custom_location   = _("PROJECT_CUSTOM_LOCATION");
-    const wxString project_custom_relative   = _("PROJECT_CUSTOM_RELATIVE");
-    const wxString workspace_custom_location = _("WORKSPACE_CUSTOM_LOCATION");
-    const wxString workspace_custom_relative = _("WORKSPACE_CUSTOM_RELATIVE");
-
-    const wxString separator                 = _("-----------------");
-
     class IMenuCmd : public IInterfaceBase
     {
         public:
@@ -50,8 +33,6 @@ namespace CBTSVN
             virtual void SetProjectBased(bool ProjectBased)=0;
             virtual bool GetWorkspaceBased() const=0;
             virtual void SetWorkspaceBased(bool ProjectBased)=0;
-            virtual void SetCustom(bool custom)=0;
-            virtual bool GetCustom() const=0;
             virtual wxString GetFilename() const=0;
             virtual void SetFilename(const wxString& filename)=0;
     };
