@@ -765,7 +765,7 @@ void CBTortoiseSVN::OnAbout(wxCommandEvent &event)
 {
     wxString msg;
     msg+= _("SVN interface for Codeblocks based on TortoiseSVN\r\n\r\n");
-    msg+= _("Hosted at http://tools.assembla.com/svn/CBTortoiseSVN\r\n\r\n");
+    msg+= _("Hosted at http://code.google.com/p/cbtortoisesvn/\r\n\r\n");
     msg+= _("By Jan van den Borst");
     wxMessageBox(msg, _("About..."), wxOK|wxICON_INFORMATION);
 }
