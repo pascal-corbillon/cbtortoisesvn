@@ -385,7 +385,7 @@ void CBTortoiseSVN::RemoveMenu(wxMenuBar *menuBar)
 
 void CBTortoiseSVN::OnUpdateUI(wxUpdateUIEvent &event)
 {
-    if (!Manager::isappShuttingDown())
+    if (!Manager::IsAppShuttingDown())
     {
         wxWindow* pAppWin  = wxTheApp->GetTopWindow();
         if (pAppWin)
@@ -694,7 +694,7 @@ void CBTortoiseSVN::OnCustomConfig(wxCommandEvent &event)
 void CBTortoiseSVN::RebuildMainMenu()
 {
     m_previous_mainmenu=CBSvnPluginManager::GetInstance().GetMainMenu();
-    if (Manager::isappShuttingDown())
+    if (Manager::IsAppShuttingDown())
         return;
 
     wxWindow* pAppWin  = wxTheApp->GetTopWindow();
@@ -735,7 +735,7 @@ void CBTortoiseSVN::RebuildMainMenu()
 
 void CBTortoiseSVN::OnFileProjectWorkspaceBased(wxCommandEvent &event)
 {
-    if (Manager::isappShuttingDown())
+    if (Manager::IsAppShuttingDown())
         return;
 
     wxWindow* pAppWin  = wxTheApp->GetTopWindow();
