@@ -1,0 +1,1 @@
+CBTortoiseSVN, a subversion plugin for codeblocks based on TortoiseSVN
